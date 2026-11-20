@@ -1,0 +1,123 @@
+import express from "express"
+import { upload } from "../Config/multerConfig.js"
+import { verifyToken, checkAdminRole } from "../middleware/auth.js"
+import {
+    getCityPreference,
+    setCityPreference,
+    listEmergencyContacts,
+    createEmergencyContact,
+    updateEmergencyContact,
+    deleteEmergencyContact,
+    submitFeedback,
+    myFeedback,
+    adminListFeedback,
+    adminRespondFeedback,
+    listFaqs,
+    adminListFaqs,
+    adminCreateFaq,
+    adminUpdateFaq,
+    adminDeleteFaq,
+    listPosts,
+    getPost,
+    adminListPosts,
+    adminGetPost,
+    adminCreatePost,
+    adminUpdatePost,
+    adminDeletePost,
+    listContests,
+    joinContest,
+    adminListContests,
+    adminContestEntries,
+    adminDeleteContest,
+    adminUploadCover,
+    adminCreateContest,
+    adminUpdateContest,
+    adminPickContestWinners,
+    adminSetEntryStatus,
+    getContest,
+    togglePostLike,
+    togglePostBookmark,
+    listPostComments,
+    addPostComment,
+    deleteMyPostComment,
+    adminListComments,
+    adminModerateComment,
+    adminDeleteComment,
+    getMyReferrals,
+    applyReferralCode,
+    getProtectionPlans,
+    getProtectionOverview,
+    purchaseProtection,
+    claimProtection,
+    adminDecideClaim,
+} from "../controllers/engagementController.js"
+
+const router = express.Router()
+
+// City
+router.get("/city", verifyToken, getCityPreference)
+router.put("/city", verifyToken, setCityPreference)
+
+// Admin cover image upload
+router.post("/admin/upload-cover", verifyToken, checkAdminRole, upload.single("image"), adminUploadCover)
+
+// Emergency contacts
+router.get("/emergency-contacts", verifyToken, listEmergencyContacts)
+router.post("/emergency-contacts", verifyToken, createEmergencyContact)
+router.put("/emergency-contacts/:id", verifyToken, updateEmergencyContact)
+router.delete("/emergency-contacts/:id", verifyToken, deleteEmergencyContact)
+
+// Feedback
+router.post("/feedback", verifyToken, submitFeedback)
+router.get("/feedback/mine", verifyToken, myFeedback)
+router.get("/feedback/admin", verifyToken, checkAdminRole, adminListFeedback)
+router.put("/feedback/admin/:id", verifyToken, checkAdminRole, adminRespondFeedback)
+
+// FAQs
+router.get("/faqs", verifyToken, listFaqs)
+router.get("/faqs/admin/all", verifyToken, checkAdminRole, adminListFaqs)
+router.post("/faqs", verifyToken, checkAdminRole, adminCreateFaq)
+router.put("/faqs/:id", verifyToken, checkAdminRole, adminUpdateFaq)
+router.delete("/faqs/:id", verifyToken, checkAdminRole, adminDeleteFaq)
+
+// News & blog
+router.get("/posts", verifyToken, listPosts)
+router.get("/posts/admin/all", verifyToken, checkAdminRole, adminListPosts)
+router.get("/posts/admin/comments", verifyToken, checkAdminRole, adminListComments)
+router.put("/posts/admin/comments/:commentId", verifyToken, checkAdminRole, adminModerateComment)
+router.delete("/posts/admin/comments/:commentId", verifyToken, checkAdminRole, adminDeleteComment)
+router.get("/posts/admin/:id", verifyToken, checkAdminRole, adminGetPost)
+router.get("/posts/:idOrSlug", verifyToken, getPost)
+router.post("/posts", verifyToken, checkAdminRole, adminCreatePost)
+router.put("/posts/:id", verifyToken, checkAdminRole, adminUpdatePost)
+router.delete("/posts/:id", verifyToken, checkAdminRole, adminDeletePost)
+router.post("/posts/:id/like", verifyToken, togglePostLike)
+router.post("/posts/:id/bookmark", verifyToken, togglePostBookmark)
+router.get("/posts/:id/comments", verifyToken, listPostComments)
+router.post("/posts/:id/comments", verifyToken, addPostComment)
+router.delete("/posts/comments/:commentId", verifyToken, deleteMyPostComment)
+
+// Contests
+router.get("/contests", verifyToken, listContests)
+router.get("/contests/admin/all", verifyToken, checkAdminRole, adminListContests)
+router.get("/contests/:id", verifyToken, getContest)
+router.get("/contests/:id/entries", verifyToken, checkAdminRole, adminContestEntries)
+router.put("/contests/:id/entries/:entryId", verifyToken, checkAdminRole, adminSetEntryStatus)
+router.delete("/contests/:id", verifyToken, checkAdminRole, adminDeleteContest)
+router.post("/contests", verifyToken, checkAdminRole, adminCreateContest)
+router.put("/contests/:id", verifyToken, checkAdminRole, adminUpdateContest)
+router.post("/contests/:id/join", verifyToken, joinContest)
+router.post("/contests/:id/winners", verifyToken, checkAdminRole, adminPickContestWinners)
+
+// Referrals
+router.get("/referrals", verifyToken, getMyReferrals)
+router.post("/referrals/apply", verifyToken, applyReferralCode)
+
+// Trip protection
+router.get("/trip-protection/plans", verifyToken, getProtectionPlans)
+router.get("/trip-protection", verifyToken, getProtectionOverview)
+router.post("/trip-protection", verifyToken, purchaseProtection)
+router.post("/trip-protection/:id/claim", verifyToken, claimProtection)
+router.put("/trip-protection/:id/claim/admin", verifyToken, checkAdminRole, adminDecideClaim)
+
+export default router
