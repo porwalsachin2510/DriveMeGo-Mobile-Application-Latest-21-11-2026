@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Alert, Modal, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import * as WebBrowser from "expo-web-browser";
+import { openCheckout } from "../utils/paymentReturn";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Ionicons } from "@expo/vector-icons";
 import { Screen } from "./Screen";
@@ -44,8 +44,13 @@ export function WalletView({ header = <AppHeader />, tabBarSpace = true }) {
       const url = res.paymentUrl || res.url || res.data?.paymentUrl || res.data?.url;
       if (!url) throw new Error(res.message || "Payment session unavailable");
       setOpen(false);
-      await WebBrowser.openBrowserAsync(url);
+      const result = await openCheckout(url);
       qc.invalidateQueries({ queryKey: ["wallet"] });
+      if (result.status === "success") {
+        Alert.alert("Top up successful", "Your wallet balance will update in a few seconds.");
+      } else if (result.status === "cancel") {
+        Alert.alert("Top up cancelled", "No money was charged.");
+      }
     } catch (e) {
       Alert.alert("Top up failed", e?.response?.data?.message || e.message);
     } finally {

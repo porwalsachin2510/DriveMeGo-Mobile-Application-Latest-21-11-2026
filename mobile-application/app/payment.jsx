@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
 import { useRouter } from "expo-router";
-import * as WebBrowser from "expo-web-browser";
+import { openCheckout } from "../src/utils/paymentReturn";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
@@ -91,10 +91,17 @@ export default function Payment() {
       const url = res.payment?.paymentUrl;
 
       if (url) {
-        await WebBrowser.openBrowserAsync(url);
+        const checkout = await openCheckout(url);
         refresh();
+        if (checkout.status === "cancel" || checkout.status === "dismissed") {
+          Alert.alert(
+            "Payment not completed",
+            "Your booking is saved but unpaid. You can complete payment from My Bookings.",
+          );
+          return;
+        }
         routeStore.clear();
-        setResult({ method, bookingId, pending: true, amount: total, currency, summary, route });
+        setResult({ method, bookingId, pending: checkout.status !== "success", amount: total, currency, summary, route });
         return;
       }
       if (method === "STRIPE") throw new Error(res.message || "Payment gateway is not configured. Please try another method.");

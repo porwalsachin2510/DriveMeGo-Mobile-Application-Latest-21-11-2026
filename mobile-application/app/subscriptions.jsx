@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { Alert, Linking, Pressable, StyleSheet, Switch, Text, View } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import * as WebBrowser from "expo-web-browser";
+import { openCheckout } from "../src/utils/paymentReturn";
 import { useFocusEffect } from "expo-router";
 import { Screen } from "../src/components/Screen";
 import { AppHeader } from "../src/components/AppHeader";
@@ -99,7 +99,12 @@ export default function SubscriptionsScreen() {
       const res = await subscriptionService.renew({ paymentMethod: method, passId: String(pass._id), renewalMonths: months });
       const payment = res?.data?.payment;
       if (res?.data?.paymentRequired && payment?.paymentUrl) {
-        await WebBrowser.openBrowserAsync(payment.paymentUrl);
+        const result = await openCheckout(payment.paymentUrl);
+        if (result.status === "success") {
+          Alert.alert("Payment received", "Your renewal will be active as soon as the payment is confirmed.");
+        } else if (result.status === "cancel") {
+          Alert.alert("Payment cancelled", "Your pass was not renewed.");
+        }
       } else {
         Alert.alert("Renewed", res?.message || "Monthly pass renewed successfully.");
       }

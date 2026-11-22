@@ -14,6 +14,7 @@ import bankValidationService from "../Services/bankValidationService.js"
 import currencyConversionService from "../Services/currencyConversionService.js"
 import { settleCashDuesOnTopUp } from "../Services/cashCancellationService.js"
 import crypto from "crypto"
+import { buildPaymentRedirectUrl } from "../utils/paymentReturn.js"
 
 /**
  * Resolve the currency a user's wallet should use.
@@ -87,7 +88,7 @@ export const createPaymentSession = async (req, res) => {
                 phone: user.phone,
             },
             contractId: `WALLET-${userId}`,
-            redirectUrl: `${process.env.FRONTEND_URL.split(",")[0]}/wallet/payment/verify`,
+            redirectUrl: buildPaymentRedirectUrl(req, { webPath: "/wallet/payment/verify", flow: "wallet" }),
             metadata: {
                 type: "WALLET_TOPUP",
                 userId,

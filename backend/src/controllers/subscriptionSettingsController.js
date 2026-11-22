@@ -12,6 +12,7 @@ import { createNotification } from "../Services/notificationService.js";
 import { resolveDisplayCurrency, convertForDisplay } from "../Services/displayCurrency.js";
 import { getOrCreateWallet, resolvePlatformAdminId } from "../Services/walletService.js";
 import { computePassSeatAvailability } from "../Services/seatAvailabilityService.js";
+import { buildPaymentRedirectUrl, getFrontendBaseUrl } from "../utils/paymentReturn.js";
 
 /*
  * Subscription renewal supports three commuter-chosen methods:
@@ -950,7 +951,7 @@ const renewWithCard = async (req, res, settings, basePass, renewalMonths) => {
                 phone: passenger?.phoneNumber || passenger?.whatsappNumber,
             },
             contractId: basePass._id.toString(),
-            redirectUrl: `${process.env.FRONTEND_URL.split(",")[0]}/payment-success`,
+            redirectUrl: buildPaymentRedirectUrl(req, { webPath: "/payment-success", flow: "renewal" }),
             webhookUrl: `${process.env.BACKEND_URL}/api/webhook/payment`,
             metadata: {
                 passengerId: userId.toString(),
@@ -1446,7 +1447,7 @@ const autoRenewCard = async (subscription, basePass) => {
                 phone: passenger?.phoneNumber || passenger?.whatsappNumber,
             },
             contractId: basePass._id,
-            redirectUrl: `${process.env.FRONTEND_URL.split(",")[0]}/payment-success`,
+            redirectUrl: `${getFrontendBaseUrl()}/payment-success`,
             webhookUrl: `${process.env.BACKEND_URL}/api/webhook/payment`,
             metadata: {
                 passengerId: userId.toString(),

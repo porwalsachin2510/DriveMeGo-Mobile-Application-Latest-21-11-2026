@@ -18,6 +18,7 @@ import {
     sendPassCancelledNotification,
 } from "../Services/notificationService.js";
 import { checkBookingEligibility } from "../Services/cashCancellationService.js";
+import { buildPaymentRedirectUrl } from "../utils/paymentReturn.js";
 
 // Helper function to get B2C Partner commission rate
 const getB2CPartnerCommissionRate = async (partnerId) => {
@@ -1382,7 +1383,7 @@ export const createB2CMonthlyPass = async (req, res) => {
                         phone: passenger?.phoneNumber
                     },
                     contractId: monthlyPass._id,
-                    redirectUrl: `${process.env.FRONTEND_URL.split(",")[0]}/payment-success`,
+                    redirectUrl: buildPaymentRedirectUrl(req, { webPath: "/payment-success", flow: "booking" }),
                     webhookUrl: `${process.env.BACKEND_URL}/api/webhook/payment`,
                     metadata: {
                         passengerId: passengerId.toString(),

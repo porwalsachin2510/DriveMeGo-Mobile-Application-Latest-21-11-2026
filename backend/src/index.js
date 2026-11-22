@@ -63,6 +63,8 @@ import demandRoutes from "./routes/demandRoutes.js"
 import demandPortalRoutes from "./routes/demandPortalRoutes.js"
 import importExportRoutes from "./routes/importExportRoutes.js"
 import engagementRoutes from "./routes/engagementRoutes.js"
+import mobilePaymentReturnRoutes from "./routes/mobilePaymentReturnRoutes.js"
+import { splitUrlList } from "./utils/paymentReturn.js"
 import { seedDropdownOptions } from "./controllers/dropdownController.js"
 // import { dailyTripGeneration, frequentTripGeneration, hourlyTripGeneration, runImmediateGeneration, corporateTripGeneration } from "./cron/tripGenerationCron.js"
 import { processDailyRenewals, sendDailyRenewalReminders } from "./cron/subscriptionCron.js"
@@ -82,7 +84,7 @@ const server = createServer(app)
    ✅ FRONTEND ORIGINS FROM ENV
 ================================ */
 const allowedOrigins = process.env.FRONTEND_URL
-    ? process.env.FRONTEND_URL.split(",").map(o => o.trim())
+    ? splitUrlList(process.env.FRONTEND_URL)
     : ["http://localhost:5173"];
 
 console.log("✅ Allowed Origins:", allowedOrigins);
@@ -112,6 +114,8 @@ const corsOptions = {
         "Content-Type",
         "Authorization",
         "x-onbehalf-contract",
+        "x-client-platform",
+        "x-app-return-url",
     ],
 };
 
@@ -862,6 +866,7 @@ app.use("/api/demand", demandRoutes)
 app.use("/api/demand-portal", demandPortalRoutes)
 app.use("/api/import-export", importExportRoutes)
 app.use("/api/engagement", engagementRoutes)
+app.use("/api/mobile-payment", mobilePaymentReturnRoutes)
 
 // Error handling middleware
 app.use((err, req, res, next) => {

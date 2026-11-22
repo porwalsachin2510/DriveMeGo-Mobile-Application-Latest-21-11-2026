@@ -1,5 +1,6 @@
 import axios from "axios";
 import { API_BASE } from "../config/env";
+import { getAppReturnUrl } from "../utils/paymentReturn";
 
 let authToken = null;
 let unauthorizedHandler = null;
@@ -22,6 +23,8 @@ const api = axios.create({
 
 api.interceptors.request.use((config) => {
   if (authToken) config.headers.Authorization = `Bearer ${authToken}`;
+  config.headers["X-Client-Platform"] = "mobile";
+  config.headers["X-App-Return-Url"] = getAppReturnUrl();
   if (config.data instanceof FormData) {
     config.headers["Content-Type"] = "multipart/form-data";
   }
