@@ -11,7 +11,7 @@ import Referral from "../models/Referral.js"
 import TripProtection from "../models/TripProtection.js"
 import B2CPassengerBooking from "../models/B2CPassengerBooking.js"
 import { COUNTRY_CONFIG, COUNTRY_LOCATIONS } from "../Config/localizationConfig.js"
-import { debitWallet, resolveUserWalletRole } from "../Services/walletService.js"
+import { creditWallet, debitWallet, resolveUserWalletRole } from "../Services/walletService.js"
 import { createNotification } from "../Services/notificationService.js"
 import { uploadToCloudinary } from "../Config/Cloudinary.js"
 
@@ -1211,14 +1211,93 @@ export const adminDecideClaim = async (req, res) => {
         if (!isId(req.params.id)) return fail(res, 400, "Invalid protection id")
         const decision = String(req.body?.decision || "").toUpperCase()
         if (!["APPROVED", "REJECTED"].includes(decision)) return fail(res, 400, "Decision must be APPROVED or REJECTED")
-        const protection = await TripProtection.findById(req.params.id)
-        if (!protection || protection.claim?.status !== "SUBMITTED") return fail(res, 404, "No open claim found")
-        protection.claim.status = decision
-        protection.claim.decidedAt = new Date()
-        protection.claim.adminNote = req.body?.adminNote
-        await protection.save()
-        res.json({ success: true, data: { protection } })
+        const adminNote = String(req.body?.adminNote || "").trim().slice(0, 1000) || undefined
+
+        const existing = await TripProtection.findById(req.params.id).populate("booking", "paymentAmount currency pickupLocation dropoffLocation").lean()
+        if (!existing || existing.claim?.status !== "SUBMITTED") return fail(res, 404, "No open claim found")
+
+        const refundAmount =
+            decision === "APPROVED"
+                ? roundMoney(((existing.booking?.paymentAmount || 0) * existing.refundPercent) / 100, existing.currency)
+                : 0
+
+        // Atomic transition: only one admin request can move SUBMITTED -> decided, so the refund is paid once.
+        const protection = await TripProtection.findOneAndUpdate(
+            { _id: existing._id, "claim.status": "SUBMITTED" },
+            {
+                $set: {
+                    "claim.status": decision,
+                    "claim.decidedAt": new Date(),
+                    "claim.adminNote": adminNote,
+                    ...(decision === "APPROVED" ? { "claim.refundAmount": refundAmount } : {}),
+                },
+            },
+            { new: true },
+        )
+        if (!protection) return fail(res, 409, "This claim was already decided")
+
+        if (decision === "APPROVED" && refundAmount > 0) {
+            const role = await resolveUserWalletRole(protection.user, "COMMUTER")
+            const credit = await creditWallet({
+                userId: protection.user,
+                role,
+                amount: refundAmount,
+                currency: protection.currency,
+                embeddedType: "REFUND",
+                ledgerCategory: "REFUND",
+                description: "Trip protection claim refund",
+                referenceId: protection._id,
+                referenceModel: "TripProtection",
+                countsAsEarning: false,
+            })
+            if (!credit.success) {
+                await TripProtection.updateOne({ _id: protection._id }, { $set: { "claim.status": "SUBMITTED" }, $unset: { "claim.decidedAt": "", "claim.refundAmount": "" } })
+                return fail(res, 500, credit.message || "Could not refund the wallet")
+            }
+            protection.claim.refundedAt = new Date()
+            await protection.save()
+        }
+
+        const route = [existing.booking?.pickupLocation, existing.booking?.dropoffLocation].filter(Boolean).join(" to ")
+        await createNotification({
+            userId: protection.user,
+            type: "TRIP_PROTECTION",
+            title: decision === "APPROVED" ? "Claim approved" : "Claim not approved",
+            message:
+                decision === "APPROVED"
+                    ? `Your trip protection claim${route ? ` for ${route}` : ""} was approved. ${refundAmount} ${protection.currency} was added to your wallet.`
+                    : `Your trip protection claim${route ? ` for ${route}` : ""} was not approved.${adminNote ? ` ${adminNote}` : ""}`,
+            data: { protectionId: String(protection._id), link: "/secure-trip" },
+        }).catch(() => {})
+
+        res.json({
+            success: true,
+            message: decision === "APPROVED" ? `Claim approved and ${refundAmount} ${protection.currency} refunded` : "Claim rejected",
+            data: { protection },
+        })
     } catch (error) {
         serverError(res, "adminDecideClaim", error)
+    }
+}
+
+export const adminListClaims = async (req, res) => {
+    try {
+        const status = String(req.query.status || "").toUpperCase()
+        const filter = { status: "CLAIMED" }
+        if (["SUBMITTED", "APPROVED", "REJECTED"].includes(status)) filter["claim.status"] = status
+        const [items, grouped] = await Promise.all([
+            TripProtection.find(filter)
+                .populate("user", "fullName email phone")
+                .populate("booking", "pickupLocation dropoffLocation travelDate passStartDate paymentAmount currency bookingStatus")
+                .sort({ "claim.submittedAt": -1 })
+                .limit(200)
+                .lean(),
+            TripProtection.aggregate([{ $match: { status: "CLAIMED" } }, { $group: { _id: "$claim.status", n: { $sum: 1 } } }]),
+        ])
+        const stats = { SUBMITTED: 0, APPROVED: 0, REJECTED: 0 }
+        for (const g of grouped) if (g._id in stats) stats[g._id] = g.n
+        res.json({ success: true, data: { items, stats } })
+    } catch (error) {
+        serverError(res, "adminListClaims", error)
     }
 }

@@ -57,6 +57,7 @@ export const walletService = {
   balance: () => api.get("/wallet/balance").then(unwrap),
   transactions: (page = 1, limit = 20) => api.get("/wallet/transactions", { params: { page, limit } }).then(unwrap),
   createPaymentSession: (payload) => api.post("/wallet/create-payment-session", payload).then(unwrap),
+  addFunds: (payload) => api.post("/wallet/add-funds", payload).then(unwrap),
   withdraw: (payload) => api.post("/wallet/withdraw", payload).then(unwrap),
 };
 

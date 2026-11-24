@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { Alert, StyleSheet, Text, View } from "react-native";
-import { useFocusEffect } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { SubScreen, errorMessage } from "../src/components/SubScreen";
 import { Badge, Button, Card, EmptyState, Field, Loading, SectionTitle } from "../src/components/ui";
@@ -10,6 +10,8 @@ import { colors } from "../src/theme";
 
 const planName = (plans, id) => plans.find((p) => p.id === id)?.name || id;
 const CLAIM_TONE = { SUBMITTED: "warning", APPROVED: "success", REJECTED: "danger" };
+const MIN_REASON = 10;
+const WALLET_PATH = "/wallet";
 
 export default function SecureTripScreen() {
   const [data, setData] = useState(null);
@@ -54,7 +56,14 @@ export default function SecureTripScreen() {
             await engagementService.buyProtection({ bookingId: booking._id, plan: quote.plan });
             await load(false);
           } catch (e) {
-            Alert.alert("Could not buy cover", errorMessage(e));
+            if (e?.response?.status === 402) {
+              Alert.alert("Wallet balance too low", `Add funds to your wallet to pay ${price} for this cover.`, [
+                { text: "Not now", style: "cancel" },
+                { text: "Add funds", onPress: () => router.push(WALLET_PATH) },
+              ]);
+            } else {
+              Alert.alert("Could not buy cover", errorMessage(e));
+            }
           } finally {
             setBuying(null);
           }
@@ -64,12 +73,17 @@ export default function SecureTripScreen() {
   };
 
   const submitClaim = async (id) => {
+    if (reason.trim().length < MIN_REASON) {
+      Alert.alert("Add more detail", `Please describe why you cannot travel (at least ${MIN_REASON} characters).`);
+      return;
+    }
     setSubmitting(true);
     try {
-      await engagementService.claimProtection(id, reason);
+      await engagementService.claimProtection(id, reason.trim());
       setClaimingId(null);
       setReason("");
       await load(false);
+      Alert.alert("Claim submitted", "Our team will review it. If approved, the refund is added to your wallet.");
     } catch (e) {
       Alert.alert("Could not submit claim", errorMessage(e));
     } finally {
@@ -135,6 +149,15 @@ export default function SecureTripScreen() {
               <Text style={styles.meta}>
                 {planName(data.plans, p.plan)} | {formatMoney(p.premium, p.currency)} paid | up to {p.refundPercent}% back
               </Text>
+              {p.claim?.reason ? <Text style={styles.meta}>Your reason: {p.claim.reason}</Text> : null}
+              {p.claim?.status === "APPROVED" && p.claim?.refundAmount > 0 ? (
+                <View style={styles.refund}>
+                  <Ionicons name="wallet-outline" size={16} color={colors.tealDark} />
+                  <Text style={styles.refundText}>
+                    {formatMoney(p.claim.refundAmount, p.currency)} refunded to your wallet{p.claim.refundedAt ? ` on ${formatDate(p.claim.refundedAt)}` : ""}
+                  </Text>
+                </View>
+              ) : null}
               {p.claim?.adminNote ? <Text style={styles.note}>{p.claim.adminNote}</Text> : null}
               {p.status === "ACTIVE" ? (
                 claimingId === p._id ? (
@@ -170,5 +193,7 @@ const styles = StyleSheet.create({
   perkText: { flex: 1, fontSize: 13.5, color: colors.muted, lineHeight: 19 },
   route: { flex: 1, fontSize: 15, fontWeight: "800", color: colors.navy },
   meta: { fontSize: 12.5, color: colors.muted, marginTop: 4 },
+  refund: { flexDirection: "row", alignItems: "center", gap: 8, marginTop: 8 },
+  refundText: { flex: 1, fontSize: 13, fontWeight: "700", color: colors.tealDark },
   note: { fontSize: 13, color: colors.navy, marginTop: 8, padding: 10, borderRadius: 10, backgroundColor: colors.tealTint },
 });

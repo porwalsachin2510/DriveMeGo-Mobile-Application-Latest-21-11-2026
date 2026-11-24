@@ -15,6 +15,8 @@ const tripProtectionSchema = new mongoose.Schema(
             submittedAt: { type: Date },
             decidedAt: { type: Date },
             adminNote: { type: String, trim: true, maxlength: 1000 },
+            refundAmount: { type: Number, min: 0 },
+            refundedAt: { type: Date },
         },
     },
     { timestamps: true },

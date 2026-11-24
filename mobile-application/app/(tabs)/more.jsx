@@ -64,7 +64,7 @@ export default function MoreTab() {
 
   return (
     <Screen header={<AppHeader />} tabBarSpace decor>
-      <Pressable onPress={() => router.push("/profile")} accessibilityRole="button">
+      <Pressable onPress={() => router.push("/settings")} accessibilityRole="button" accessibilityLabel="Edit profile">
         <Card style={styles.profile}>
           {avatar ? (
             <Image source={{ uri: avatar }} style={styles.avatar} contentFit="cover" />

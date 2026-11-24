@@ -5,6 +5,7 @@ import AdminPosts from "./AdminPosts";
 import AdminContests from "./AdminContests";
 import AdminFaqs from "./AdminFaqs";
 import AdminFeedback from "./AdminFeedback";
+import AdminProtectionClaims from "./AdminProtectionClaims";
 import "./AdminEngagement.css";
 
 const TABS = [
@@ -31,6 +32,12 @@ const TABS = [
     label: "Feedback",
     hint: "Read and reply to commuter feedback.",
     Component: AdminFeedback,
+  },
+  {
+    id: "claims",
+    label: "Trip claims",
+    hint: "Review Secure Your Trip claims. Approved refunds go to the commuter's wallet.",
+    Component: AdminProtectionClaims,
   },
 ];
 

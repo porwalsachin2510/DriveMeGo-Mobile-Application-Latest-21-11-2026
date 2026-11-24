@@ -223,7 +223,8 @@ export default function ContestsScreen() {
 
                   {c.joined ? (
                     <View style={{ gap: 6 }}>
-                      <Badge label={c.won ? "Winner" : "You're entered"} tone="teal" icon="checkmark-circle" />
+                      <Badge label={c.won ? "You won" : "You're entered"} tone={c.won ? "warning" : "teal"} icon={c.won ? "trophy" : "checkmark-circle"} />
+                      {c.won && c.prize ? <Text style={styles.fact}>Congratulations! Our team will contact you about your prize: {c.prize}</Text> : null}
                       {c.myEntry?.answer ? <Text style={styles.fact}>Your answer: {c.myEntry.answer}</Text> : null}
                       {c.myEntry?.selectedOption !== undefined && c.myEntry?.selectedOption !== null && c.options?.[c.myEntry.selectedOption] ? (
                         <Text style={styles.fact}>Your pick: {c.options[c.myEntry.selectedOption]}</Text>

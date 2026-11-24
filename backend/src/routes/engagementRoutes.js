@@ -50,6 +50,7 @@ import {
     purchaseProtection,
     claimProtection,
     adminDecideClaim,
+    adminListClaims,
 } from "../controllers/engagementController.js"
 
 const router = express.Router()
@@ -118,6 +119,7 @@ router.get("/trip-protection/plans", verifyToken, getProtectionPlans)
 router.get("/trip-protection", verifyToken, getProtectionOverview)
 router.post("/trip-protection", verifyToken, purchaseProtection)
 router.post("/trip-protection/:id/claim", verifyToken, claimProtection)
+router.get("/trip-protection/claims/admin", verifyToken, checkAdminRole, adminListClaims)
 router.put("/trip-protection/:id/claim/admin", verifyToken, checkAdminRole, adminDecideClaim)
 
 export default router

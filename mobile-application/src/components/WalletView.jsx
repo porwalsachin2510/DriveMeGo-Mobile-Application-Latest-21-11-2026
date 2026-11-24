@@ -45,12 +45,29 @@ export function WalletView({ header = <AppHeader />, tabBarSpace = true }) {
       if (!url) throw new Error(res.message || "Payment session unavailable");
       setOpen(false);
       const result = await openCheckout(url);
-      qc.invalidateQueries({ queryKey: ["wallet"] });
-      if (result.status === "success") {
-        Alert.alert("Top up successful", "Your wallet balance will update in a few seconds.");
+      const paymentSessionId = result.tapId || result.sessionId || res.sessionId || res.data?.sessionId;
+      if (result.status === "success" && paymentSessionId) {
+        // Same verification the web callback performs: the backend checks the gateway and credits once.
+        const verified = await walletService.addFunds({
+          amount: 0,
+          paymentMethod: "card",
+          paymentDetails: {},
+          paymentSessionId,
+          gateway: result.tapId ? "TAP" : "STRIPE",
+        });
+        setAmount("100");
+        Alert.alert(
+          "Top up successful",
+          verified?.alreadyProcessed || verified?.data?.alreadyProcessed
+            ? "This payment was already added. Your balance is up to date."
+            : "Funds have been added to your wallet.",
+        );
       } else if (result.status === "cancel") {
         Alert.alert("Top up cancelled", "No money was charged.");
+      } else if (result.status !== "dismissed") {
+        Alert.alert("Payment not completed", "The payment did not go through. Please try again.");
       }
+      qc.invalidateQueries({ queryKey: ["wallet"] });
     } catch (e) {
       Alert.alert("Top up failed", e?.response?.data?.message || e.message);
     } finally {
