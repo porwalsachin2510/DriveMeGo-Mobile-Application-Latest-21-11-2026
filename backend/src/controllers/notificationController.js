@@ -11,8 +11,9 @@ export { createNotification }
 // Get user notifications
 export const getUserNotifications = async (req, res) => {
     try {
-        const { userId } = req.params
-        const { page = 1, limit = 20 } = req.query
+        const userId = req.userId || req.params.userId
+        const page = Math.max(parseInt(req.query.page, 10) || 1, 1)
+        const limit = Math.min(Math.max(parseInt(req.query.limit, 10) || 20, 1), 100)
 
         const notifications = await Notification.find({
             $or: [
@@ -68,7 +69,7 @@ export const getUserNotifications = async (req, res) => {
 export const markNotificationAsRead = async (req, res) => {
     try {
         const { notificationId } = req.params
-        const { userId } = req.body
+        const userId = req.userId || req.body?.userId
 
         const notification = await Notification.findOneAndUpdate(
             {
@@ -121,7 +122,7 @@ export const markNotificationAsRead = async (req, res) => {
 // Mark all notifications as read
 export const markAllNotificationsAsRead = async (req, res) => {
     try {
-        const { userId } = req.params
+        const userId = req.userId || req.params.userId
 
         await Notification.updateMany(
             {
@@ -154,7 +155,7 @@ export const markAllNotificationsAsRead = async (req, res) => {
 export const deleteNotification = async (req, res) => {
     try {
         const { notificationId } = req.params
-        const { userId } = req.body
+        const userId = req.userId || req.body?.userId
 
         const notification = await Notification.findOneAndDelete({
             _id: notificationId,
@@ -190,7 +191,7 @@ export const deleteNotification = async (req, res) => {
 // Get unread notification count
 export const getUnreadNotificationCount = async (req, res) => {
     try {
-        const { userId } = req.params
+        const userId = req.userId || req.params.userId
 
         const count = await Notification.countDocuments({
             $or: [

@@ -63,7 +63,7 @@ export const walletService = {
 
 export const notificationService = {
   list: (userId, page = 1, limit = 30) =>
-    api.get(`/notifications/user/${userId}`, { params: { page, limit } }).then(unwrap),
+    api.get(`/notifications/user/${userId}`, { params: { page, limit } }).then((res) => res.data?.data ?? res.data),
   unreadCount: (userId) => api.get(`/notifications/user/${userId}/unread-count`).then(unwrap),
   markRead: (id) => api.patch(`/notifications/${id}/read`).then(unwrap),
   markAllRead: (userId) => api.patch(`/notifications/user/${userId}/read-all`).then(unwrap),
