@@ -40,7 +40,7 @@ export function WalletView({ header = <AppHeader />, tabBarSpace = true }) {
     if (!Number.isFinite(value) || value < 1) return Alert.alert("Invalid amount", "Enter a valid amount to add.");
     setBusy(true);
     try {
-      const res = await walletService.createPaymentSession({ amount: value, currency });
+      const res = await walletService.createPaymentSession({ amount: value, currency, paymentMethod: "card" });
       const url = res.paymentUrl || res.url || res.data?.paymentUrl || res.data?.url;
       if (!url) throw new Error(res.message || "Payment session unavailable");
       setOpen(false);

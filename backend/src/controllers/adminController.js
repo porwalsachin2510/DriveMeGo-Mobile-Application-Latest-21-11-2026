@@ -7549,28 +7549,6 @@ export const updateCommuterProfile = async (req, res) => {
             });
         }
 
-        // Log profile update in transaction history
-        await Transaction.create({
-            userId: userId,
-            type: "PROFILE_UPDATE",
-            category: "USER_PROFILE",
-            status: "UPDATED",
-            createdAt: new Date(),
-            metadata: {
-                updatedBy: userId,
-                previousProfile: {
-                    fullName: user.fullName,
-                    email: user.email,
-                    whatsappNumber: user.whatsappNumber,
-                    language: user.language,
-                    currency: user.currency,
-                    profileImage: user.profileImage
-                },
-                newProfile: profile,
-                preferences: preferences
-            }
-        });
-
         console.log(`[v0] Commuter profile updated successfully for user ${userId}`);
 
         res.status(200).json({
@@ -7596,23 +7574,11 @@ export const updateCommuterProfile = async (req, res) => {
     } catch (error) {
         console.error("[v0] Error updating commuter profile:", error);
 
-        // Log failed profile update attempt
-        try {
-            await Transaction.create({
-                userId: req.userId,
-                type: "PROFILE_UPDATE_FAILED",
-                category: "USER_PROFILE",
-                status: "FAILED",
-                createdAt: new Date(),
-                metadata: {
-                    error: error.message,
-                    attemptedAt: new Date(),
-                    profileData: req.body.profile,
-                    preferencesData: req.body.preferences
-                }
+        if (error?.name === "ValidationError" || error?.code === 11000) {
+            return res.status(400).json({
+                success: false,
+                message: error.code === 11000 ? "That email or phone is already in use" : error.message,
             });
-        } catch (logError) {
-            console.error("[v0] Failed to log profile update error:", logError);
         }
 
         res.status(500).json({

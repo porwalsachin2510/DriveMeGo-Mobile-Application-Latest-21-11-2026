@@ -174,7 +174,7 @@ export default function TravelHistoryScreen() {
             <TripCard
               key={String(t._id)}
               trip={t}
-              onPress={() => t.bookingId && router.push({ pathname: "/booking-details", params: { bookingId: String(t.bookingId) } })}
+              onPress={() => t.bookingId && router.push(`/booking-details/${String(t.bookingId?._id || t.bookingId)}`)}
             />
           ))}
         </View>

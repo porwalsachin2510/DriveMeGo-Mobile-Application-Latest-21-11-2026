@@ -13,7 +13,8 @@ import { bookingStatusMeta, formatDateLong, formatMoney } from "../../src/utils/
 import { colors, radius, type } from "../../src/theme";
 
 export default function BookingDetails() {
-  const { id } = useLocalSearchParams();
+  const params = useLocalSearchParams();
+  const id = params.id || params.bookingId;
   const router = useRouter();
   const qc = useQueryClient();
 
