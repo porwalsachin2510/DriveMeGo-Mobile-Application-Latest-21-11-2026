@@ -44,7 +44,7 @@ export default function Login() {
     <AuthShell>
       <View style={styles.accent} />
       <Text style={[type.h3, { fontWeight: "600", marginBottom: 2 }]}>Welcome Back</Text>
-      <Text style={[type.display, { fontSize: 28 }]}>Sign in to your account</Text>
+      <Text style={[type.display, { fontSize: 23 }]}>Sign in to your account</Text>
       <Text style={[type.body, { color: colors.muted, marginTop: 6, marginBottom: 24 }]}>
         Continue your journey with Drive Me Go.
       </Text>

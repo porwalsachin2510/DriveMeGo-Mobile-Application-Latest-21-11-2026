@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
   stopText: { fontSize: 11, fontWeight: "600", color: colors.navySoft },
   footer: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginTop: 16, gap: 10 },
   priceLabel: { fontSize: 13, color: colors.muted },
-  price: { fontSize: 22, fontWeight: "800", color: colors.navy, marginTop: 1 },
+  price: { fontSize: 18, fontWeight: "800", color: colors.navy, marginTop: 1 },
   book: {
     flexDirection: "row",
     alignItems: "center",

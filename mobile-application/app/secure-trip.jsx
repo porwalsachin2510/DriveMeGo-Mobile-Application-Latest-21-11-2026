@@ -188,7 +188,7 @@ export default function SecureTripScreen() {
 
 const styles = StyleSheet.create({
   planHead: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 10 },
-  planName: { fontSize: 17, fontWeight: "800", color: colors.navy },
+  planName: { fontSize: 15.5, fontWeight: "800", color: colors.navy },
   perk: { flexDirection: "row", alignItems: "flex-start", gap: 8, marginTop: 10 },
   perkText: { flex: 1, fontSize: 13.5, color: colors.muted, lineHeight: 19 },
   route: { flex: 1, fontSize: 15, fontWeight: "800", color: colors.navy },

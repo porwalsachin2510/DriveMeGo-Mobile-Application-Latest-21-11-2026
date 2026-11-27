@@ -123,12 +123,12 @@ function Stat({ icon, label, value }) {
 const styles = StyleSheet.create({
   stats: { flexDirection: "row", gap: 8, marginBottom: 12 },
   stat: { flex: 1, alignItems: "center", padding: 12, gap: 4 },
-  statValue: { fontSize: 18, fontWeight: "800", color: colors.navy },
+  statValue: { fontSize: 16, fontWeight: "800", color: colors.navy },
   tabs: { flexDirection: "row", gap: 8, marginBottom: 12 },
   card: { padding: 14, marginBottom: 12, gap: 10 },
   head: { flexDirection: "row", alignItems: "flex-start", gap: 10 },
   bookmark: { width: 38, height: 38, borderRadius: radius.md, alignItems: "center", justifyContent: "center", backgroundColor: colors.tealSoft },
   meta: { flexDirection: "row", flexWrap: "wrap", gap: 6 },
   footer: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 10 },
-  price: { fontSize: 17, fontWeight: "800", color: colors.success, marginTop: 2 },
+  price: { fontSize: 15.5, fontWeight: "800", color: colors.success, marginTop: 2 },
 });

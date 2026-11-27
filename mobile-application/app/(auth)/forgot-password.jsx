@@ -64,7 +64,7 @@ export default function ForgotPassword() {
       <View style={styles.shield}>
         <Ionicons name="shield-checkmark" size={22} color={colors.teal} />
       </View>
-      <Text style={[type.display, { fontSize: 34 }]}>
+      <Text style={[type.display, { fontSize: 25 }]}>
         {titles[0]} <Text style={{ color: colors.teal }}>{titles[1]}</Text>
       </Text>
       <Text style={[type.body, { color: colors.muted, marginTop: 8, marginBottom: 24 }]}>{titles[2]}</Text>

@@ -73,7 +73,7 @@ export default function Routes() {
           <Ionicons name="bus" size={26} color={colors.tealDark} />
         </View>
         <View style={{ flex: 1 }}>
-          <Text style={[type.h1, { fontSize: 22 }]}>Available B2C Routes</Text>
+          <Text style={[type.h1, { fontSize: 19 }]}>Available B2C Routes</Text>
           <Text style={type.small}>
             {isLoading
               ? "Searching routes..."
@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
   titleRow: { flexDirection: "row", alignItems: "center", gap: 12, marginTop: 6, marginBottom: 14 },
   titleIcon: {
     width: 56,
-    height: 56,
+    height: 48,
     borderRadius: 28,
     backgroundColor: colors.tealSoft,
     alignItems: "center",
@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
-    height: 52,
+    height: 46,
     paddingHorizontal: 16,
     borderRadius: radius.lg,
     backgroundColor: "#fff",

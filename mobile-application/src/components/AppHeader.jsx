@@ -39,14 +39,14 @@ export function AppHeader({ onBack, transparent }) {
       <View style={styles.left}>
         {onBack ? (
           <Pressable onPress={onBack} hitSlop={12} style={styles.back} accessibilityLabel="Go back">
-            <Ionicons name="arrow-back" size={22} color={colors.navy} />
+            <Ionicons name="arrow-back" size={19} color={colors.navy} />
           </Pressable>
         ) : null}
         <Image source={require("../../assets/images/logo-full.png")} style={styles.logo} contentFit="contain" />
       </View>
       <View style={styles.right}>
         <Pressable onPress={() => router.push("/notifications")} hitSlop={8} style={styles.bell} accessibilityLabel="Notifications">
-          <Ionicons name="notifications-outline" size={26} color={colors.navy} />
+          <Ionicons name="notifications-outline" size={22} color={colors.navy} />
           {unread > 0 ? (
             <View style={styles.badge}>
               <Text style={styles.badgeText}>{unread > 9 ? "9+" : unread}</Text>
@@ -72,39 +72,41 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: 20,
-    paddingBottom: 10,
+    paddingHorizontal: 16,
+    paddingBottom: 8,
     backgroundColor: colors.bg,
   },
-  left: { flexDirection: "row", alignItems: "center", gap: 10 },
+  left: { flexDirection: "row", alignItems: "center", gap: 8 },
   back: {
-    width: 38,
-    height: 38,
-    borderRadius: 19,
+    width: 34,
+    height: 34,
+    borderRadius: 17,
     backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: colors.border,
     alignItems: "center",
     justifyContent: "center",
   },
-  logo: { width: 150, height: 42 },
-  right: { flexDirection: "row", alignItems: "center", gap: 14 },
-  bell: { width: 36, height: 36, alignItems: "center", justifyContent: "center" },
+  logo: { width: 118, height: 32 },
+  right: { flexDirection: "row", alignItems: "center", gap: 10 },
+  bell: { width: 34, height: 34, alignItems: "center", justifyContent: "center" },
   badge: {
     position: "absolute",
-    top: 0,
-    right: 0,
-    minWidth: 18,
-    height: 18,
-    borderRadius: 9,
-    paddingHorizontal: 4,
+    top: 1,
+    right: 1,
+    minWidth: 16,
+    height: 16,
+    borderRadius: 8,
+    paddingHorizontal: 3,
     backgroundColor: colors.danger,
     alignItems: "center",
     justifyContent: "center",
   },
-  badgeText: { color: "#fff", fontSize: 10, fontWeight: "800" },
+  badgeText: { color: "#fff", fontSize: 9, fontWeight: "800" },
   avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 34,
+    height: 34,
+    borderRadius: 17,
     backgroundColor: colors.tealSoft,
     alignItems: "center",
     justifyContent: "center",

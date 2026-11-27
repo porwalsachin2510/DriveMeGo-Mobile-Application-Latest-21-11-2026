@@ -198,14 +198,14 @@ function TxRow({ tx, currency, last }) {
 
 const styles = StyleSheet.create({
   banner: { flexDirection: "row", alignItems: "center", gap: 14, padding: 18, borderRadius: radius.xl, marginBottom: 16 },
-  bannerIcon: { width: 52, height: 52, borderRadius: 16, backgroundColor: "rgba(255,255,255,0.2)", alignItems: "center", justifyContent: "center" },
-  balance: { fontSize: 36, fontWeight: "800", color: colors.navy, marginTop: 6 },
+  bannerIcon: { width: 42, height: 42, borderRadius: 12, backgroundColor: "rgba(255,255,255,0.2)", alignItems: "center", justifyContent: "center" },
+  balance: { fontSize: 28, fontWeight: "800", color: colors.navy, marginTop: 6 },
   stat: { flex: 1, flexDirection: "row", alignItems: "center", gap: 10, padding: 12, borderRadius: radius.md, backgroundColor: colors.tealTint, borderWidth: 1, borderColor: colors.border },
   tx: { flexDirection: "row", alignItems: "center", gap: 12, paddingVertical: 14 },
   txIcon: { width: 44, height: 44, borderRadius: 14, alignItems: "center", justifyContent: "center" },
   backdrop: { flex: 1, backgroundColor: colors.overlay },
   sheet: { backgroundColor: "#fff", borderTopLeftRadius: 28, borderTopRightRadius: 28, padding: 20, paddingBottom: 34 },
-  amountInput: { height: 56, borderRadius: radius.md, borderWidth: 1, borderColor: colors.border, paddingHorizontal: 16, fontSize: 22, fontWeight: "800", color: colors.navy, backgroundColor: colors.tealTint },
-  textInput: { height: 50, marginTop: 10, borderRadius: radius.md, borderWidth: 1, borderColor: colors.border, paddingHorizontal: 16, fontSize: 15, color: colors.navy, backgroundColor: "#fff" },
+  amountInput: { height: 50, borderRadius: radius.md, borderWidth: 1, borderColor: colors.border, paddingHorizontal: 14, fontSize: 19, fontWeight: "800", color: colors.navy, backgroundColor: colors.tealTint },
+  textInput: { height: 46, marginTop: 10, borderRadius: radius.md, borderWidth: 1, borderColor: colors.border, paddingHorizontal: 14, fontSize: 14, color: colors.navy, backgroundColor: "#fff" },
   preset: { flex: 1, height: 42, borderRadius: radius.pill, backgroundColor: colors.tealSoft, alignItems: "center", justifyContent: "center" },
 });

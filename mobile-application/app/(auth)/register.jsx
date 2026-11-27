@@ -78,7 +78,7 @@ export default function Register() {
       }
     >
       <Text style={styles.kicker}>— JOIN DRIVEMEGO</Text>
-      <Text style={[type.display, { fontSize: 27 }]}>Create your account</Text>
+      <Text style={[type.display, { fontSize: 23 }]}>Create your account</Text>
       <Text style={[type.body, { color: colors.muted, marginTop: 6, marginBottom: 20 }]}>
         Join thousands of commuters riding verified daily routes.
       </Text>
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
   phoneRow: { flexDirection: "row", gap: 10 },
   code: {
     width: 96,
-    height: 54,
+    height: 46,
     borderRadius: radius.md,
     backgroundColor: "#fff",
     borderWidth: 1,

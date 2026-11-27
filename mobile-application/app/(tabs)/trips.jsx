@@ -104,7 +104,7 @@ function BookingCard({ booking: b, status, onOpen, onCancel }) {
           <Text style={styles.caption}>PAYMENT</Text>
           <Text style={{ fontWeight: "700", color: colors.navy }}>{b.paymentMethod || "-"}</Text>
         </View>
-        <Text style={{ fontSize: 20, fontWeight: "800", color: colors.navy }}>{formatMoney(amount, b.currency || "AED")}</Text>
+        <Text style={{ fontSize: 17, fontWeight: "800", color: colors.navy }}>{formatMoney(amount, b.currency || "AED")}</Text>
       </View>
       <View style={{ flexDirection: "row", gap: 10 }}>
         <View style={{ flex: 1 }}><Button title="View Details" variant="soft" icon="eye-outline" onPress={onOpen} small /></View>
@@ -118,7 +118,7 @@ function BookingCard({ booking: b, status, onOpen, onCancel }) {
 
 const styles = StyleSheet.create({
   banner: { flexDirection: "row", alignItems: "center", gap: 14, padding: 18, borderRadius: radius.xl, marginBottom: 16 },
-  bannerIcon: { width: 52, height: 52, borderRadius: 16, backgroundColor: "rgba(255,255,255,0.2)", alignItems: "center", justifyContent: "center" },
+  bannerIcon: { width: 42, height: 42, borderRadius: 12, backgroundColor: "rgba(255,255,255,0.2)", alignItems: "center", justifyContent: "center" },
   rowBetween: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
   meta: { flexDirection: "row", alignItems: "center", gap: 6, marginTop: 6 },
   priceBox: { backgroundColor: colors.tealTint, borderRadius: radius.md, padding: 12, marginVertical: 14 },

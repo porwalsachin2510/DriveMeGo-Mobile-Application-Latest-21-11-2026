@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
   hero: { flexDirection: "row", alignItems: "center", minHeight: 140, marginTop: 4, marginBottom: 10 },
   heroImg: { position: "absolute", right: -30, top: 0, width: 220, height: 140, opacity: 0.95 },
   eyebrow: { fontSize: 13, fontWeight: "700", color: colors.teal, letterSpacing: 1 },
-  title: { fontSize: 34, fontWeight: "800", color: colors.navy, letterSpacing: -0.6 },
+  title: { fontSize: 24, fontWeight: "800", color: colors.navy, letterSpacing: -0.4 },
   search: {
     flexDirection: "row",
     alignItems: "center",
@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.xl,
     paddingLeft: 16,
     paddingRight: 6,
-    height: 58,
+    height: 46,
     marginBottom: 14,
   },
   searchInput: { flex: 1, fontSize: 15, color: colors.navy },

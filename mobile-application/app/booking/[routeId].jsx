@@ -615,7 +615,7 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   stepBtn: { width: 36, height: 36, borderRadius: 18, backgroundColor: colors.tealSoft, alignItems: "center", justifyContent: "center" },
-  stepValue: { width: 44, textAlign: "center", fontSize: 17, fontWeight: "800", color: colors.navy },
+  stepValue: { width: 44, textAlign: "center", fontSize: 15.5, fontWeight: "800", color: colors.navy },
   notes: {
     minHeight: 64,
     backgroundColor: "#fff",
@@ -648,10 +648,10 @@ const styles = StyleSheet.create({
     borderRadius: radius.md,
     backgroundColor: colors.tealSoft,
   },
-  total: { fontSize: 20, fontWeight: "800", color: colors.tealDark },
+  total: { fontSize: 18, fontWeight: "800", color: colors.tealDark },
   cancel: {
     flex: 1,
-    height: 56,
+    height: 48,
     borderRadius: radius.lg,
     flexDirection: "row",
     alignItems: "center",

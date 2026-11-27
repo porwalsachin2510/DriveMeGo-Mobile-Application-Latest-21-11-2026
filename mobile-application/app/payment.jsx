@@ -257,11 +257,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
   },
-  amount: { fontSize: 30, fontWeight: "800", color: colors.teal, marginTop: 4 },
+  amount: { fontSize: 24, fontWeight: "800", color: colors.teal, marginTop: 4 },
   stripe: { fontSize: 16, fontWeight: "900", color: "#635BFF", letterSpacing: -0.3 },
   cardArt: {
     width: 86,
-    height: 64,
+    height: 54,
     borderRadius: 14,
     backgroundColor: "#1D8FE1",
     alignItems: "center",
@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   selected: { borderColor: colors.teal, backgroundColor: colors.tealTint },
-  icon: { width: 54, height: 54, borderRadius: 16, alignItems: "center", justifyContent: "center" },
+  icon: { width: 42, height: 42, borderRadius: 12, alignItems: "center", justifyContent: "center" },
   note: {
     flexDirection: "row",
     gap: 10,

@@ -56,8 +56,8 @@ export default function Home() {
     <Screen header={<AppHeader />} tabBarSpace refreshing={isRefetching} onRefresh={refetch} contentStyle={{ paddingHorizontal: 0 }}>
       <View style={styles.hero}>
         <View style={{ flex: 1, paddingLeft: 20, zIndex: 1 }}>
-          <Text style={[type.display, { fontSize: 28, lineHeight: 34 }]}>We Are</Text>
-          <Text style={[type.display, { fontSize: 28, lineHeight: 34, color: colors.teal }]}>Drive Me Go.</Text>
+          <Text style={[type.display, { fontSize: 24, lineHeight: 29 }]}>We Are</Text>
+          <Text style={[type.display, { fontSize: 24, lineHeight: 29, color: colors.teal }]}>Drive Me Go.</Text>
         </View>
         <Image source={require("../../../assets/images/hero-bus.png")} style={styles.heroBus} contentFit="cover" />
       </View>

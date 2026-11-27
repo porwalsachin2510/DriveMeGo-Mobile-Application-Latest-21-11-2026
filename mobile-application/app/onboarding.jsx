@@ -70,8 +70,8 @@ export default function Onboarding() {
         renderItem={({ item }) => (
           <View style={{ width, paddingHorizontal: 24 }}>
             <Image source={item.image} style={styles.art} contentFit="contain" />
-            <Text style={[type.display, { fontSize: 28, lineHeight: 34 }]}>{item.title}</Text>
-            <Text style={[type.display, { fontSize: 28, lineHeight: 34, color: colors.teal }]}>{item.accent}</Text>
+            <Text style={[type.display, { fontSize: 24, lineHeight: 29 }]}>{item.title}</Text>
+            <Text style={[type.display, { fontSize: 24, lineHeight: 29, color: colors.teal }]}>{item.accent}</Text>
             <Text style={[type.body, { color: colors.muted, marginTop: 12, fontSize: 15, lineHeight: 23 }]}>{item.body}</Text>
           </View>
         )}
@@ -96,7 +96,7 @@ export default function Onboarding() {
 }
 
 const styles = StyleSheet.create({
-  logo: { width: 190, height: 52 },
+  logo: { width: 150, height: 42 },
   art: { width: "100%", height: 300, marginVertical: 12 },
   dots: { flexDirection: "row", justifyContent: "center", gap: 8, marginBottom: 18 },
   dot: { width: 9, height: 9, borderRadius: 5, backgroundColor: "#D3DEE8" },

@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
   cardTop: { flexDirection: "row", alignItems: "center", gap: 12 },
   dateBlock: { width: 62, height: 78, borderRadius: radius.lg, alignItems: "center", justifyContent: "center" },
   dateDay: { fontSize: 12, fontWeight: "700" },
-  dateNum: { fontSize: 26, fontWeight: "800", lineHeight: 30 },
+  dateNum: { fontSize: 21, fontWeight: "800", lineHeight: 25 },
   dateMonth: { fontSize: 11, fontWeight: "800", letterSpacing: 0.5 },
   route: { fontSize: 15, fontWeight: "800", color: colors.navy },
   sub: { fontSize: 12.5, color: colors.muted },

@@ -130,7 +130,7 @@ export default function ReferScreen() {
 const styles = StyleSheet.create({
   codeCard: { borderRadius: 24, padding: 20 },
   codeLabel: { fontSize: 12, fontWeight: "700", color: "rgba(255,255,255,0.8)", textTransform: "uppercase", letterSpacing: 1 },
-  code: { fontSize: 32, fontWeight: "800", color: colors.white, letterSpacing: 3, marginTop: 6 },
+  code: { fontSize: 24, fontWeight: "800", color: colors.white, letterSpacing: 3, marginTop: 6 },
   heading: { fontSize: 16, fontWeight: "800", color: colors.navy },
   sub: { fontSize: 13.5, color: colors.muted, marginTop: 4, lineHeight: 19 },
   refRow: { flexDirection: "row", alignItems: "center", gap: 10, padding: 14 },

@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
   leadBody: { padding: 16, gap: 6 },
   leadTop: { flexDirection: "row", alignItems: "center", gap: 8 },
   featured: { fontSize: 11, fontWeight: "800", color: colors.white, backgroundColor: colors.tealDark, paddingHorizontal: 8, paddingVertical: 3, borderRadius: 999, overflow: "hidden" },
-  leadTitle: { fontSize: 19, fontWeight: "800", color: colors.navy, lineHeight: 25 },
+  leadTitle: { fontSize: 17, fontWeight: "800", color: colors.navy, lineHeight: 23 },
   excerpt: { fontSize: 14, color: colors.muted, lineHeight: 20 },
   meta: { flexShrink: 1, fontSize: 12, fontWeight: "700", color: colors.tealDark },
   stats: { flexDirection: "row", alignItems: "center", gap: 5, marginTop: 2 },

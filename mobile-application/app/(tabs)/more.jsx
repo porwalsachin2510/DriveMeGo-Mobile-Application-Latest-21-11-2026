@@ -145,9 +145,9 @@ export default function MoreTab() {
 
 const styles = StyleSheet.create({
   profile: { flexDirection: "row", alignItems: "center", gap: 14, padding: 14, marginBottom: 14 },
-  avatar: { width: 64, height: 64, borderRadius: 32 },
+  avatar: { width: 52, height: 52, borderRadius: 26 },
   avatarFallback: { backgroundColor: colors.tealSoft, alignItems: "center", justifyContent: "center" },
-  avatarText: { fontSize: 22, fontWeight: "800", color: colors.tealDark },
+  avatarText: { fontSize: 18, fontWeight: "800", color: colors.tealDark },
   editRow: { flexDirection: "row", alignItems: "center", gap: 4, marginTop: 4 },
   editText: { fontSize: 13, fontWeight: "700", color: colors.tealDark },
   city: { flexDirection: "row", alignItems: "center", gap: 12, padding: 14, marginBottom: 14 },

@@ -96,9 +96,9 @@ export function AccountScreen({ onBack }) {
 
 const styles = StyleSheet.create({
   profile: { flexDirection: "row", alignItems: "center", gap: 14, marginTop: 8 },
-  avatar: { width: 64, height: 64, borderRadius: 32, backgroundColor: colors.navy, alignItems: "center", justifyContent: "center", overflow: "hidden" },
-  avatarText: { color: "#fff", fontSize: 22, fontWeight: "800" },
-  name: { fontSize: 18, fontWeight: "800", color: colors.navy },
+  avatar: { width: 52, height: 52, borderRadius: 26, backgroundColor: colors.navy, alignItems: "center", justifyContent: "center", overflow: "hidden" },
+  avatarText: { color: "#fff", fontSize: 18, fontWeight: "800" },
+  name: { fontSize: 16, fontWeight: "800", color: colors.navy },
   role: { fontSize: 13, fontWeight: "700", color: colors.tealDark, marginTop: 1 },
   contact: { fontSize: 12, color: colors.muted, marginTop: 2 },
   row: { flexDirection: "row", alignItems: "center", gap: 14, padding: 14 },

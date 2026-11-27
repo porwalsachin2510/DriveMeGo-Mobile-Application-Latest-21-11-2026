@@ -23,7 +23,7 @@ export function Screen({
   const body = scroll ? (
     <ScrollView
       style={{ flex: 1 }}
-      contentContainerStyle={[{ paddingHorizontal: 20, paddingBottom: bottomPad }, contentStyle]}
+      contentContainerStyle={[{ paddingHorizontal: 16, paddingBottom: bottomPad }, contentStyle]}
       showsVerticalScrollIndicator={false}
       keyboardShouldPersistTaps="handled"
       refreshControl={onRefresh ? <RefreshControl refreshing={!!refreshing} onRefresh={onRefresh} tintColor={colors.teal} /> : undefined}
@@ -32,7 +32,7 @@ export function Screen({
       {decor ? <Image source={require("../../assets/images/city-footer.png")} style={styles.decor} contentFit="cover" /> : null}
     </ScrollView>
   ) : (
-    <View style={[{ flex: 1, paddingHorizontal: 20 }, contentStyle]}>{children}</View>
+    <View style={[{ flex: 1, paddingHorizontal: 16 }, contentStyle]}>{children}</View>
   );
 
   const content = (
@@ -57,8 +57,8 @@ const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.bg },
   decor: { width: "130%", height: 150, marginTop: 24, alignSelf: "center", opacity: 0.9 },
   footer: {
-    paddingHorizontal: 20,
-    paddingTop: 12,
+    paddingHorizontal: 16,
+    paddingTop: 10,
     backgroundColor: "rgba(244,250,252,0.96)",
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: colors.border,

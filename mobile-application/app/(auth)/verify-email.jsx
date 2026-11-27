@@ -84,8 +84,8 @@ export default function VerifyEmail() {
   return (
     <AuthShell onBack={() => router.replace("/(auth)/login")}>
       <Badge label="Secure & Private" icon="shield-checkmark" style={{ marginTop: 12 }} />
-      <Text style={[type.display, { fontSize: 36, lineHeight: 42, marginTop: 14 }]}>Email</Text>
-      <Text style={[type.display, { fontSize: 36, lineHeight: 42, color: colors.teal }]}>Verification</Text>
+      <Text style={[type.display, { fontSize: 26, lineHeight: 31, marginTop: 12 }]}>Email</Text>
+      <Text style={[type.display, { fontSize: 26, lineHeight: 31, color: colors.teal }]}>Verification</Text>
       <View style={styles.rule} />
       <Text style={[type.body, { color: colors.muted }]}>{"We've sent a 6-digit verification code to"}</Text>
       <Text style={[type.h3, { marginTop: 2 }]}>{email}</Text>
@@ -136,13 +136,13 @@ const styles = StyleSheet.create({
   otpRow: { flexDirection: "row", justifyContent: "space-between", gap: 8 },
   box: {
     flex: 1,
-    height: 58,
+    height: 50,
     borderRadius: radius.md,
     borderWidth: 1.5,
     borderColor: "#CFE8EE",
     backgroundColor: "#fff",
     textAlign: "center",
-    fontSize: 22,
+    fontSize: 19,
     fontWeight: "700",
     color: colors.navy,
   },

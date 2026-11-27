@@ -272,12 +272,12 @@ function Stat({ icon, label, value }) {
 
 const styles = StyleSheet.create({
   rowBetween: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 10 },
-  section: { fontSize: 17, fontWeight: "800", color: colors.navy, marginBottom: 10 },
+  section: { fontSize: 15.5, fontWeight: "800", color: colors.navy, marginBottom: 10 },
   chips: { flexDirection: "row", flexWrap: "wrap", gap: 8, marginBottom: 12 },
   planTop: { flexDirection: "row", alignItems: "center", gap: 12 },
-  planIcon: { width: 56, height: 56, borderRadius: radius.lg, backgroundColor: colors.teal, alignItems: "center", justifyContent: "center" },
+  planIcon: { width: 44, height: 44, borderRadius: radius.lg, backgroundColor: colors.teal, alignItems: "center", justifyContent: "center" },
   planIconSoft: { width: 48, height: 48, borderRadius: radius.lg, backgroundColor: colors.tealSoft, alignItems: "center", justifyContent: "center" },
-  planTitle: { fontSize: 18, fontWeight: "800", color: colors.navy },
+  planTitle: { fontSize: 16, fontWeight: "800", color: colors.navy },
   planSub: { fontSize: 13, color: colors.muted },
   planStats: { flexDirection: "row", marginTop: 14, paddingTop: 14, borderTopWidth: 1, borderTopColor: colors.border, gap: 8 },
   stat: { flex: 1, flexDirection: "row", alignItems: "center", gap: 6 },
