@@ -29,7 +29,14 @@ export const isCheckoutInProgress = () => checkoutInProgress;
  * to the auth session, which then resolves as "dismissed". We therefore also
  * listen for the deep link ourselves and prefer it when it arrives.
  */
-export const openCheckout = async (checkoutUrl) => {
+export const openCheckout = async (checkoutUrl, { sessionId: knownSessionId } = {}) => {
+  const result = await runCheckout(checkoutUrl);
+  // If the hand-off back to the app failed and the user closed the browser,
+  // keep the session id so the caller can still confirm the payment.
+  return { ...result, sessionId: result.sessionId || result.tapId || knownSessionId };
+};
+
+const runCheckout = async (checkoutUrl) => {
   const returnUrl = getAppReturnUrl();
   let deepLinkUrl = null;
   const sub = Linking.addEventListener("url", ({ url }) => {

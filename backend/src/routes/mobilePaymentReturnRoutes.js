@@ -8,6 +8,18 @@ const escapeHtml = (value) =>
 
 const FORWARDED_PARAMS = ["status", "session_id", "tap_id", "flow"]
 
+const androidPackageFor = (scheme) => {
+    if (scheme === "exp" || scheme === "exps") return "host.exp.exponent"
+    return String(process.env.MOBILE_ANDROID_PACKAGE || "com.drivemego.app").trim()
+}
+
+const buildAndroidIntentUrl = (deepLink) => {
+    const match = /^([a-z][a-z0-9+.-]*):\/\/+(.*)$/i.exec(deepLink)
+    if (!match) return deepLink
+    const scheme = match[1].toLowerCase()
+    return `intent://${match[2]}#Intent;scheme=${scheme};package=${androidPackageFor(scheme)};end`
+}
+
 /**
  * GET /api/mobile-payment/return?flow=wallet&app=drivemego://payment-result&status=success&session_id=cs_...
  *
@@ -27,7 +39,12 @@ router.get("/return", (req, res) => {
     if (!params.get("status")) params.set("status", req.query.tap_id ? "success" : "unknown")
 
     const deepLink = `${target}${target.includes("?") ? "&" : "?"}${params.toString()}`
-    const safeLink = escapeHtml(deepLink)
+    // Chrome on Android blocks redirects to custom schemes and often ignores
+    // plain drivemego:// links; an intent:// URL is the documented way to hand
+    // off from a Custom Tab to the installed app.
+    const isAndroid = /android/i.test(String(req.get("user-agent") || ""))
+    const handoffLink = isAndroid ? buildAndroidIntentUrl(deepLink) : deepLink
+    const safeLink = escapeHtml(handoffLink)
     const succeeded = params.get("status") === "success"
 
     res.set("Cache-Control", "no-store")
@@ -52,8 +69,9 @@ router.get("/return", (req, res) => {
   <h1>${succeeded ? "Payment received" : "Payment not completed"}</h1>
   <p>Taking you back to the Drive Me Go app...</p>
   <a href="${safeLink}">Return to the app</a>
+  <p style="margin-top:20px;font-size:13px">If nothing happens, close this window. The app will confirm your payment automatically.</p>
 </main>
-<script>setTimeout(function(){window.location.replace(${JSON.stringify(deepLink).replace(/</g, "\\u003c")})},50)</script>
+<script>setTimeout(function(){window.location.href=${JSON.stringify(handoffLink).replace(/</g, "\\u003c")}},50)</script>
 </body>
 </html>`)
 })

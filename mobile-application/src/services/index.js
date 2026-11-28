@@ -53,6 +53,17 @@ export const bookingService = {
     api.post("/monthly-pass/renew", { passId, durationMonths, paymentMethod }).then(unwrap),
 };
 
+// Same confirmation the web /payment-success page runs: the backend checks the
+// gateway and activates the booking / renewal in the database.
+export const paymentService = {
+  verify: (sessionId, provider) =>
+    api
+      .get("/payments/payment/verify", {
+        params: { session_id: sessionId, provider: provider || (String(sessionId).startsWith("chg_") ? "TAP" : "STRIPE") },
+      })
+      .then((r) => r.data),
+};
+
 export const walletService = {
   balance: () => api.get("/wallet/balance").then(unwrap),
   transactions: (page = 1, limit = 20) => api.get("/wallet/transactions", { params: { page, limit } }).then(unwrap),

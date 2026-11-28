@@ -8,7 +8,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Screen } from "../src/components/Screen";
 import { AppHeader } from "../src/components/AppHeader";
 import { Button, EmptyState } from "../src/components/ui";
-import { bookingService, routeService, walletService } from "../src/services";
+import { bookingService, paymentService, routeService, walletService } from "../src/services";
 import { routeStore } from "../src/lib/routeStore";
 import { formatDateNumeric, formatMoney } from "../src/utils/format";
 import { colors, radius, shadow, type } from "../src/theme";
@@ -91,8 +91,22 @@ export default function Payment() {
       const url = res.payment?.paymentUrl;
 
       if (url) {
-        const checkout = await openCheckout(url);
+        const checkout = await openCheckout(url, { sessionId: res.payment?.sessionId });
+        let paid = false;
+        if (checkout.status !== "cancel" && checkout.sessionId) {
+          try {
+            const verified = await paymentService.verify(checkout.sessionId, res.payment?.provider);
+            paid = verified?.success === true;
+          } catch {
+            paid = false;
+          }
+        }
         refresh();
+        if (paid) {
+          routeStore.clear();
+          setResult({ method, bookingId, pending: false, amount: total, currency, summary, route });
+          return;
+        }
         if (checkout.status === "cancel" || checkout.status === "dismissed") {
           Alert.alert(
             "Payment not completed",

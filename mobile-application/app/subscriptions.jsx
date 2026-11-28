@@ -8,7 +8,7 @@ import { Screen } from "../src/components/Screen";
 import { AppHeader } from "../src/components/AppHeader";
 import { PageHero } from "../src/components/PageHero";
 import { Badge, Button, Card, Chip, EmptyState, Field, Loading } from "../src/components/ui";
-import { subscriptionService } from "../src/services";
+import { paymentService, subscriptionService } from "../src/services";
 import { formatDateNumeric, formatMoney } from "../src/utils/format";
 import { colors, radius } from "../src/theme";
 
@@ -99,11 +99,23 @@ export default function SubscriptionsScreen() {
       const res = await subscriptionService.renew({ paymentMethod: method, passId: String(pass._id), renewalMonths: months });
       const payment = res?.data?.payment;
       if (res?.data?.paymentRequired && payment?.paymentUrl) {
-        const result = await openCheckout(payment.paymentUrl);
-        if (result.status === "success") {
-          Alert.alert("Payment received", "Your renewal will be active as soon as the payment is confirmed.");
+        const result = await openCheckout(payment.paymentUrl, { sessionId: payment.sessionId });
+        let verified = null;
+        if (result.status !== "cancel" && result.sessionId) {
+          try {
+            verified = await paymentService.verify(result.sessionId, payment.provider);
+          } catch {
+            verified = null;
+          }
+        }
+        if (verified?.success) {
+          Alert.alert("Pass renewed", verified.message || "Your monthly pass has been renewed successfully.");
         } else if (result.status === "cancel") {
           Alert.alert("Payment cancelled", "Your pass was not renewed.");
+        } else if (result.status === "success") {
+          Alert.alert("Payment received", "Your renewal will be active as soon as the payment is confirmed.");
+        } else if (result.status !== "dismissed") {
+          Alert.alert("Payment not completed", "Your pass was not renewed. Please try again.");
         }
       } else {
         Alert.alert("Renewed", res?.message || "Monthly pass renewed successfully.");

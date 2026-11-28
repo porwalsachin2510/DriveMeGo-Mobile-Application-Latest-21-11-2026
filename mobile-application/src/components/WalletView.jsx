@@ -44,17 +44,25 @@ export function WalletView({ header = <AppHeader />, tabBarSpace = true }) {
       const url = res.paymentUrl || res.url || res.data?.paymentUrl || res.data?.url;
       if (!url) throw new Error(res.message || "Payment session unavailable");
       setOpen(false);
-      const result = await openCheckout(url);
-      const paymentSessionId = result.tapId || result.sessionId || res.sessionId || res.data?.sessionId;
-      if (result.status === "success" && paymentSessionId) {
-        // Same verification the web callback performs: the backend checks the gateway and credits once.
-        const verified = await walletService.addFunds({
-          amount: 0,
-          paymentMethod: "card",
-          paymentDetails: {},
-          paymentSessionId,
-          gateway: result.tapId ? "TAP" : "STRIPE",
-        });
+      const result = await openCheckout(url, { sessionId: res.sessionId || res.data?.sessionId });
+      const paymentSessionId = result.tapId || result.sessionId;
+      // Same verification the web callback performs: the backend checks the gateway
+      // and credits once. Also runs when the browser was closed without returning.
+      let verified = null;
+      if (result.status !== "cancel" && paymentSessionId) {
+        try {
+          verified = await walletService.addFunds({
+            amount: 0,
+            paymentMethod: "card",
+            paymentDetails: {},
+            paymentSessionId,
+            gateway: String(paymentSessionId).startsWith("chg_") ? "TAP" : "STRIPE",
+          });
+        } catch (verifyError) {
+          if (result.status === "success") throw verifyError;
+        }
+      }
+      if (verified) {
         setAmount("100");
         Alert.alert(
           "Top up successful",
